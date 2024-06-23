@@ -12,18 +12,17 @@
 
 idea打开项目, 运行项目后，在浏览器上打开swagger地址，填写数据库参数，执行generator接口
 
-localhost:8080/swagger-ui.html
+localhost:8888/doc.html
 
-![](https://raw.githubusercontent.com/gaohanghang/images/master/img20190623172830.png)
 
 ### 2.1 使用MySQL数据库生成文档示例
 
-![](https://raw.githubusercontent.com/gaohanghang/images/master/img20190615022129.png)
+
 
 ### 2.2 使用PostgreSQL数据库生成文档示例
 
 
-![](https://raw.githubusercontent.com/gaohanghang/images/master/img20190615022203.png)
+
 
 ### 2.3 使用gitbook在线查看数据文档
 
@@ -58,14 +57,6 @@ sudo lsof -i :35729
 kill 查到的pid即可
 ```
 
-![](https://raw.githubusercontent.com/gaohanghang/images/master/img20190607200945.png)
-
-![](https://raw.githubusercontent.com/gaohanghang/images/master/img20190615023510.png)
 
 ### 2.4 查看生成的HTMl页面和word文档
 
-![](https://raw.githubusercontent.com/gaohanghang/images/master/img20190623173459.png)
-
-![](https://raw.githubusercontent.com/gaohanghang/images/master/imgscreely-1561283362892.png)
-
-![](https://raw.githubusercontent.com/gaohanghang/images/master/img20190623173420.png)
