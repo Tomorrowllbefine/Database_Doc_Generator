@@ -6,7 +6,7 @@
 
 ## 1. 功能介绍
 
-根据数据库表DDL生成markdown文档，支持Mysql、postgresql等数据库
+根据数据库表DDL生成markdown文档，支持Mysql, postgresql, Oracle, SqlServer等数据库
 
 ## 2. 快速使用
 
