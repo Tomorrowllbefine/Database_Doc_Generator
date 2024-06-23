@@ -1,4 +1,4 @@
-# springboot实现数据库文档生成器 2.0
+# 数据库表结构文档生成器 | SpringBoot + Swagger
 
 > 原项目地址 [database-doc-generator](https://github.com/enilu/database-doc-generator)
 >
