@@ -30,15 +30,14 @@ public class GenerateController {
             @ApiImplicitParam(name = "userName", value = "用户名", defaultValue = "username", required = true),
             @ApiImplicitParam(name = "password", value = "密码", defaultValue = "root", required = true),
             @ApiImplicitParam(name = "serviceName", value = "Oracle数据库才需要", required = false),
-
     })
-    @ApiOperation(value = "output",produces = "application/octet-stream")
+    @ApiOperation(value = "output", produces = "application/octet-stream")
     public String generatorDatabaseDoc(HttpServletResponse response, String dbType,
                                        @RequestParam(defaultValue = "localhost") String ip, String databaseName,
                                        @RequestParam(defaultValue = "5432") String port,
                                        @RequestParam(defaultValue = "postgres") String userName,
                                        @RequestParam(defaultValue = "root") String password,
-                                       @RequestParam(required = false) String serviceName) throws Exception {
+                                       @RequestParam(required = false) String serviceName) {
 
         if ("c".equals(dbType)) {
             System.exit(-1);
@@ -86,28 +85,43 @@ public class GenerateController {
         }
 
         String savePath = generator.generateDoc();
-        ZipUtil.zip(savePath, savePath + ".zip");
-        File file = new File(savePath + ".zip");
-        // 1、设置response 响应头
-        response.reset();
-        response.setCharacterEncoding("UTF-8");
-        response.setContentType("multipart/form-data");
-        response.setHeader("Content-Disposition",
-                "attachment;fileName=" + URLEncoder.encode(file.getName(), "UTF-8"));
-        // 2、 读取文件--输入流
-        InputStream input = new FileInputStream(file);
-        // 3、 写出文件--输出流
-        OutputStream out = response.getOutputStream();
-        byte[] buff = new byte[1024];
-        int index = 0;
-        // 4、执行 写出操作
-        while ((index = input.read(buff)) != -1) {
-            out.write(buff, 0, index);
-            out.flush();
+
+        InputStream input = null;
+        OutputStream out = null;
+        try {
+            // 本地文件夹打包
+            ZipUtil.zip(savePath, savePath + ".zip");
+            File file = new File(savePath + ".zip");
+
+            // 1-设置响应头
+            response.reset();
+            response.setCharacterEncoding("UTF-8");
+            response.setContentType("multipart/form-data");
+            response.setHeader("Content-Disposition",
+                    "attachment;fileName=" + URLEncoder.encode(file.getName(), "UTF-8"));
+            // 2-读取文件--输入流
+            input = new FileInputStream(file);
+            // 3-写出文件--输出流
+            out = response.getOutputStream();
+            byte[] buff = new byte[1024];
+            int index = 0;
+            // 4-写文件
+            while ((index = input.read(buff)) != -1) {
+                out.write(buff, 0, index);
+                out.flush();
+            }
+            FileUtil.del(new File(savePath).getParent());
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                out.close();
+                input.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
-        out.close();
-        input.close();
-        FileUtil.del(new File(savePath).getParent());
         return "文档生成成功";
     }
 }

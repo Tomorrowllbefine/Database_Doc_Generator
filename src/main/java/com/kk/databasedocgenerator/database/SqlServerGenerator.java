@@ -1,7 +1,7 @@
 package com.kk.databasedocgenerator.database;
 
-import com.kk.databasedocgenerator.bean.ColumnVo;
-import com.kk.databasedocgenerator.bean.TableVo;
+import com.kk.databasedocgenerator.domain.vo.ColumnVo;
+import com.kk.databasedocgenerator.domain.vo.TableVo;
 import org.nutz.dao.entity.Record;
 import org.nutz.dao.impl.SimpleDataSource;
 
@@ -16,6 +16,10 @@ public class SqlServerGenerator extends Generator {
     private String sqlTables = "SELECT\n" + "  cast(tbs.name AS VARCHAR(255))AS NAME,\n"
             + "  cast(ds.value AS VARCHAR(255)) AS COMMENT\n" + "FROM sys.extended_properties ds\n"
             + "  LEFT JOIN sysobjects tbs ON\n" + "  ds.major_id=tbs.id\n" + "WHERE  ds.minor_id=0";
+    /*private String sqlTables =
+             "USE @dbname;" +"\nSELECT t.name AS table_name, ep.value AS table_comment "
+            + "\nFROM sys.tables t LEFT JOIN sys.extended_properties ep ON ep.major_id = t.object_id AND ep.minor_id = 0 AND ep.class = 1 AND ep.name = 'MS_Description' "
+            + "\nORDER BY t.name ASC;";*/
 
     private String sqlColumns = "\n" + "SELECT\n" + "    column_name=C.name,\n"
             + "    column_key=ISNULL(IDX.PrimaryKey,N''),\n" + "    column_type=T.name,\n"
@@ -54,6 +58,7 @@ public class SqlServerGenerator extends Generator {
 
     @Override
     public List<TableVo> getTableData() {
+        // String sql = sqlTables.replace("@dbname", dbName);
         List<Record> list = getList(sqlTables);
         List<TableVo> tables = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
